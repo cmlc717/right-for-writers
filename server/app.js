@@ -16,7 +16,7 @@ app.use(morgan('dev'));
 app.use('/api', require('./apiRoutes')); // matches all requests to /api
 
 app.get('*', function (req, res) {
-    res.sendFile(path.join(__dirname, './path/to/index.html'));
+    res.sendFile(path.join(__dirname, '../public/index.html'));
 })
 
 app.use(function (err, req, res, next) {

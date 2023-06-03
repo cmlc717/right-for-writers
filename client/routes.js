@@ -18,17 +18,17 @@ class myRoutes extends Component {
 
     return (
       <div>
-        {isLoggedIn ? (
+        {/* {isLoggedIn ? (
           <Routes>
             <Route path="/home" component={Home} />
           </Routes>
-        ) : (
+        ) : ( */}
           <Routes>
             <Route path='/' exact component={ Login } />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
           </Routes>
-        )}
+        {/* )} */}
       </div>
     )
   }
