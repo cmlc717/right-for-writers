@@ -1,10 +1,19 @@
 const router = require('express').Router();
 const User = require('../models/user');
 
-router.use(function (req, res, next) {
-    const err = new Error('Not found.');
-    err.status = 404;
-    next(err);
+const requireToken = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization;
+    const user = await User.findByToken(token);
+    req.user = user;
+    next();
+  } catch (ex) {
+    next(ex);
+  }
+};
+
+router.get('/auth', requireToken, async (req, res, next) => {
+  res.send(req.user);
 });
 
 router.post('/login', async (req, res, next) => {
@@ -17,7 +26,7 @@ router.post('/login', async (req, res, next) => {
 
 router.post('/signup', async (req, res, next) => {
     try {
-      const user = await User.create(req.body)
+      const user = await User.create(req.body);
       res.send({token: await user.generateToken()})
     } catch (err) {
       if (err.name === 'SequelizeUniqueConstraintError') {
@@ -26,6 +35,12 @@ router.post('/signup', async (req, res, next) => {
         next(err)
       }
     }
+});
+
+router.use(function (req, res, next) {
+  const err = new Error('Not found.');
+  err.status = 404;
+  next(err);
 });
 
 module.exports = router;

@@ -3,6 +3,8 @@ const db = require('../db/database')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt');
 const axios = require('axios');
+require("dotenv").config();
+
 
 const SALT_ROUNDS = 5;
 
@@ -71,3 +73,9 @@ const hashPassword = async(user) => {
     user.password = await bcrypt.hash(user.password, SALT_ROUNDS);
   }
 }
+
+User.beforeCreate(async (user, option) => {
+  const hashedPassword = await bcrypt.hash(user.password, 10);
+  user.password = hashedPassword;
+});
+User.beforeUpdate(hashPassword);

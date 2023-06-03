@@ -1,11 +1,10 @@
 import React from 'react'
-
-import myRoutes from './routes'
+import Main from './Main'
 
 const App = () => {
   return (
     <div>
-      <myRoutes />
+      <Main />
     </div>
   )
 }

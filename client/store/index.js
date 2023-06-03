@@ -1,15 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
-import yourReducer from '../components/yourReducer';
-import thunkMiddleware from 'redux-thunk';
-import { createLogger } from 'redux-logger';
-import { applyMiddleware } from 'redux';
+// import thunkMiddleware from 'redux-thunk';
+// import { createLogger } from 'redux-logger';
+// import { applyMiddleware } from 'redux';
+import LoginSlice from "../components/LoginSlice";
+import SignupSlice from "../components/SignupSlice";
 
-const store = configureStore(
-  yourReducer,
-  applyMiddleware(
-    thunkMiddleware,
-    createLogger()
-  )
-);
+const store = configureStore({
+  reducer: {
+    Login: LoginSlice,
+    Signup: SignupSlice
+  }
+});
 
 export default store;

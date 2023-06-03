@@ -1,71 +1,52 @@
-import React from 'react'
-import {connect} from 'react-redux'
-import {authenticate} from '../store/auth'
+import React, {useEffect} from 'react'
+import { fetchSignupAsync, selectSignup } from './SignupSlice';
+import { fetchLoginAsync, selectLogin } from './LoginSlice';
+import { useSelector, useDispatch } from 'react-redux'
+import Home from './Home';
 
 /**
  * COMPONENT
  */
-const AuthForm = props => {
-  const {name, displayName, handleSubmit, error} = props
+const AuthForm = () => {
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [loginAttempt, setLoginAttempt] = React.useState(false);
+    const [signupAttempt, setSignupAttempt] = React.useState(false);
+    const [user, setUser] = React.useState('')
+    const dispatch = useDispatch();
 
-  return (
-    <div>
-      <form onSubmit={handleSubmit} name={name}>
-        <div>
-          <label htmlFor="username">
-            <small>Username</small>
-          </label>
-          <input name="username" type="text" />
-        </div>
-        <div>
-          <label htmlFor="password">
-            <small>Password</small>
-          </label>
-          <input name="password" type="password" />
-        </div>
-        <div>
-          <button type="submit">{displayName}</button>
-        </div>
-        {error && error.response && <div> {error.response.data} </div>}
-      </form>
-    </div>
-  )
-}
-
-/**
- * CONTAINER
- *   Note that we have two different sets of 'mapStateToProps' functions -
- *   one for Login, and one for Signup. However, they share the same 'mapDispatchToProps'
- *   function, and share the same Component. This is a good example of how we
- *   can stay DRY with interfaces that are very similar to each other!
- */
-const mapLogin = state => {
-  return {
-    name: 'login',
-    displayName: 'Login',
-    error: state.auth.error
-  }
-}
-
-const mapSignup = state => {
-  return {
-    name: 'signup',
-    displayName: 'Sign Up',
-    error: state.auth.error
-  }
-}
-
-const mapDispatch = dispatch => {
-  return {
-    handleSubmit(evt) {
-      evt.preventDefault()
-      const formName = evt.target.name
-      const username = evt.target.username.value
-      const password = evt.target.password.value
-      dispatch(authenticate(username, password, formName))
+    const onChange = ev => {
+      if (ev.target.name === 'username') setUsername(ev.target.value)
+      if (ev.target.name === 'password') setPassword(ev.target.value)
     }
-  }
+
+    const onSubmit = ev => {
+      ev.preventDefault()
+      if (ev.target.name === 'signup') setSignupAttempt(true);
+      if (ev.target.name === 'login')  setLoginAttempt(true);
+    }
+
+    useEffect (() => {
+      if (loginAttempt) {
+        dispatch(fetchLoginAsync({username, password}));
+        setUser(selectLogin);
+      } else if (signupAttempt) {
+        dispatch(fetchSignupAsync({username, password}));
+        setUser(selectSignup);
+      }
+    }, [loginAttempt, signupAttempt]);
+
+    return (
+      <>
+        {!loginAttempt && !signupAttempt?
+        <form>
+          <input value={username} onChange={onChange} name="username" />
+          <input value={password} onChange={onChange} name="password" />
+          <button type='submit' name ='signup' onClick={onSubmit}>Sign Up</button>
+          <button type='submit' name='login' onClick={onSubmit}>Log In</button>
+        </form> : <Home username={username} />}
+      </>
+    )
 }
 
-export const Login = connect(mapLogin, mapDispatch)(AuthForm)
-export const Signup = connect(mapSignup, mapDispatch)(AuthForm)
+export default AuthForm;
