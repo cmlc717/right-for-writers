@@ -23,6 +23,7 @@ async function seed() {
   const posts = await Promise.all([
     Post.create({name: "Blankets are the Best!", content: "I love blankets so much!", postDate: date1.getDate(), editDate: date1.getDate(), views: 1, inProgress: true}),
     Post.create({name: "The Birthday Song is Mind Control", content: "Never sing the birthday song! It's a mind control device created by humans to get them to eat cake!", postDate: date2.getDate(), editDate: date2.getDate(), views: 1, inProgress: false}),
+    Post.create({name: "Benefits of Sun Bathing", content: "I love the sun! I have a great tan in the summer!", postDate: date3.getDate(), editDate: date3.getDate(), views: 1, inProgress: true}),
   ]);
 
   // Creating relations
@@ -30,6 +31,8 @@ async function seed() {
   posts[1].setAuthor(users[1]);
   posts[0].setEditor(users[1]);
   posts[1].setEditor(users[0]);
+  posts[2].setEditor(users[1]);
+  posts[2].setAuthor(users[0]);
 }
 
 if (module === require.main) {

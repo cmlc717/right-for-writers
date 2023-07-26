@@ -6,8 +6,8 @@ const Post = require('../models/posts');
 const Genre = require('../models/genre');
 const Comment = require('../models/comment');
 
-Post.hasOne(User, {as: "Author"});
-Post.hasOne(User, {as: "Editor"});
+Post.belongsTo(User, {as: "Author", foreignKey: "AuthorId"});
+Post.belongsTo(User, {as: "Editor", foreignKey: "EditorId"});
 User.hasMany(Post, {as: "Author"});
 User.hasMany(Post, {as: "Editor"});
 
