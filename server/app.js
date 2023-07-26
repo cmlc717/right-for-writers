@@ -12,8 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(morgan('dev'));
 
-// server.js
-app.use('/apiRoutes', require('./apiRoutes')); // matches all requests to /api
+app.use('/apiRoutes', require('./apiRoutes'));
 
 app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, '../public/index.html'));

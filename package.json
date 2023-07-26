@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha ./tests/*.spec.js --compilers js:babel-register",
     "start": "node server",
-    "start-dev": "webpack -w & nodemon server"
+    "start-dev": "webpack -w & nodemon server",
+    "seed": "node ./script/seed.js"
   },
   "keywords": [],
   "author": "",

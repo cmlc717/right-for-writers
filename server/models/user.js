@@ -1,6 +1,6 @@
-const Sequelize = require('sequelize')
-const db = require('../db/database')
-const jwt = require('jsonwebtoken')
+const Sequelize = require('sequelize');
+const db = require('../db/database');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const axios = require('axios');
 require("dotenv").config();
@@ -12,17 +12,43 @@ const User = db.define('user', {
   username: {
     type: Sequelize.STRING,
     unique: true,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      isAlphanumeric: true
+    }
   },
   password: {
     type: Sequelize.STRING,
   },
-  githubId: {
-    type: Sequelize.INTEGER
+  email: {
+    type: Sequelize.STRING,
+    unique: true,
+    allowNull: false,
+    validate: {
+      isEmail: true
+    }
+  },
+  dob: {
+    type: Sequelize.DATE,
+    validate: {
+      isDate: true, 
+    }
+  },
+  age: {
+    type: Sequelize.INTEGER,
+    validate: {
+      min: 18
+    }
+  },
+  editor: {
+    type: Sequelize.BOOLEAN
+  },
+  writer: {
+    type: Sequelize.BOOLEAN
   }
-})
+});
 
-module.exports = User
+module.exports = User;
 
 /**
  * instanceMethods
@@ -33,14 +59,14 @@ User.prototype.correctPassword = function(candidatePwd) {
 }
 
 User.prototype.generateToken = function() {
-  return jwt.sign({id: this.id}, process.env.JWT)
+  return jwt.sign({id: this.id}, process.env.JWT);
 }
 
 /**
  * classMethods
  */
 User.authenticate = async function({ username, password }){
-    const user = await this.findOne({where: { username }})
+    const user = await this.findOne({where: { username }});
     if (!user || !(await user.correctPassword(password))) {
       const error = Error('Incorrect username/password');
       error.status = 401;
@@ -51,16 +77,16 @@ User.authenticate = async function({ username, password }){
 
 User.findByToken = async function(token) {
   try {
-    const {id} = await jwt.verify(token, process.env.JWT)
-    const user = User.findByPk(id)
+    const {id} = await jwt.verify(token, process.env.JWT);
+    const user = User.findByPk(id);
     if (!user) {
-      throw 'nooo'
+      throw 'nooo';
     }
     return user
   } catch (ex) {
-    const error = Error('bad token')
-    error.status = 401
-    throw error
+    const error = Error('bad token');
+    error.status = 401;
+    throw error;
   }
 }
 
