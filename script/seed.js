@@ -2,7 +2,13 @@
 
 const {
   db,
-  models: { User, Post },
+  models: { 
+    User, 
+    Post, 
+    Tag,
+    Genre,
+    Comment 
+  },
 } = require("../server/db/index");
 
 async function seed() {
@@ -11,7 +17,8 @@ async function seed() {
   const users = await Promise.all([
     User.create({ username: "Ren", password: "123", email: "ren@dog.org", dob: "2000-04-26", age: 23, editor: true, writer: true}),
     User.create({ username: "Jericho", password: "123", email: "jericho@dog.org", dob: "1999-01-30", age: 24, editor: true, writer: true}),
-
+    User.create({ username: "Nala", password: "123", email: "nala@dog.org", dob: "1999-06-30", age: 24, editor: false, writer: true}),
+    User.create({ username: "Yana", password: "123", email: "yana@dog.org", dob: "1999-06-30", age: 24, editor: true, writer: false}),
   ]);
 
   // Creating Posts
@@ -26,6 +33,20 @@ async function seed() {
     Post.create({name: "Benefits of Sun Bathing", content: "I love the sun! I have a great tan in the summer!", postDate: date3.getDate(), editDate: date3.getDate(), views: 1, inProgress: true}),
   ]);
 
+  const comment = await Comment.create({content: "I agree!", likes: 1});
+
+  const tags = await Promise.all([
+    Tag.create({name: "Lifestyle"}),
+    Tag.create({name: "Science"}),
+    Tag.create({name: "Conspiracy"}),
+  ]);
+
+  const genres = await Promise.all([
+    Genre.create({name: "Nonfiction"}),
+    Genre.create({name: "Op-Ed"}),
+    Genre.create({name: "Fantasy"}),
+  ]);
+
   // Creating relations
   posts[0].setAuthor(users[0]);
   posts[1].setAuthor(users[1]);
@@ -33,6 +54,16 @@ async function seed() {
   posts[1].setEditor(users[0]);
   posts[2].setEditor(users[1]);
   posts[2].setAuthor(users[0]);
+  posts[1].addTag(tags[2]);
+  posts[2].addTag(tags[1]);
+  posts[0].addTag(tags[0]);
+  posts[0].addGenre(genres[0]);
+  posts[1].addGenre(genres[2]);
+  posts[2].addGenre(genres[1]);
+  comment.setPost(posts[0]);
+  users[3].addLiked(posts[0]);
+  users[3].addFavorited(posts[1]);
+  users[3].addBookmarked(posts[2]);
 }
 
 if (module === require.main) {
