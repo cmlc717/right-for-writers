@@ -37,6 +37,12 @@ router.post('/signup', async (req, res, next) => {
     }
 });
 
+router.use('/users', require('./users'));
+router.use('/posts', require('./posts'));
+router.use('/tags', require('./tags'));
+router.use('/genres', require('./genres'));
+router.use('/comments', require('./comments'));
+
 router.use(function (req, res, next) {
   const err = new Error('Not found.');
   err.status = 404;
