@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { models: { User, }} = require('../db');
+const { models: { User }} = require('../db');
 module.exports = router;
 
 router.get('/', async (req, res, next) => {
@@ -16,7 +16,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:userId', async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId, {
-      attributes: ['username', 'email']
+      attributes: ['username', 'email', 'editor', 'writer']
     });
     res.json(user);
   } catch (err) {

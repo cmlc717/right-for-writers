@@ -11,10 +11,19 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-router.get('/:postId', async (req, res, next) => {
+router.get('/byPostId/:postId', async (req, res, next) => {
     try {
-        const post = await Post.findByPk(req.params.postId);
+        const post = await Post.findByPk(req.params.postId, {include: {model: User, as: "Author", attributes: ['username', 'email', 'editor', 'writer']}});
         res.json(post);
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.get('/byUserId/:userId', async (req, res, next) => {
+    try {
+        const userPosts = await Post.findAll({where: {AuthorId: req.params.userId}})
+        res.json(userPosts);
     } catch (err) {
         next(err);
     }
@@ -31,7 +40,7 @@ router.post('/', async (req, res, next) => {
         });    
 
         await post.setAuthor(user);
-        
+
         const tagList = req.body.tags.split(' '); 
         const tags = await Promise.all(tagList.map(async (tagName) => {
             const [tag, wasCreated] = await Tag.findOrCreate({
@@ -40,7 +49,7 @@ router.post('/', async (req, res, next) => {
                 } 
             }); 
             return tag;
-        })); 
+        }));
         await post.addTags(tags)
 
         const [genre, genreWasCreated] = await Genre.findOrCreate({
