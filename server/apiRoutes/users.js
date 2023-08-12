@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { models: { User }} = require('../db');
+const { models: { User, Post}} = require('../db');
 module.exports = router;
 
 router.get('/', async (req, res, next) => {
@@ -27,7 +27,8 @@ router.get('/:userId', async (req, res, next) => {
 router.get('/:userId/likes', async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId, {
-      attributes: ['username', 'email', 'editor', 'writer'], include: {model: Post, as: "Liked"}
+      attributes: ['username', 'email', 'editor', 'writer'], 
+      include: {model: Post, as: "Liked"}
     });
     res.json(user);
   } catch (err) {
@@ -38,7 +39,8 @@ router.get('/:userId/likes', async (req, res, next) => {
 router.get('/:userId/favorites', async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId, {
-      attributes: ['username', 'email', 'editor', 'writer'], include: {model: Post, as: "Favorited"}
+      attributes: ['username', 'email', 'editor', 'writer'], 
+      include: {model: Post, as: "Favorited"}
     });
     res.json(user);
   } catch (err) {
@@ -49,7 +51,8 @@ router.get('/:userId/favorites', async (req, res, next) => {
 router.get('/:userId/bookmarks', async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId, {
-      attributes: ['username', 'email', 'editor', 'writer'], include: {model: Post, as: "Bookmarked"}
+      attributes: ['username', 'email', 'editor', 'writer'], 
+      include: {model: Post, as: "Bookmarked"}
     });
     res.json(user);
   } catch (err) {

@@ -13,7 +13,14 @@ router.get('/', async (req, res, next) => {
 
 router.get('/byPostId/:postId', async (req, res, next) => {
     try {
-        const post = await Post.findByPk(req.params.postId, {include: [{model: User, as: "Author", attributes: ['username', 'email', 'editor', 'writer']},{model: User, as: "Editor", attributes: ['username', 'email', 'editor', 'writer']}, {model: Tag}, {model: Genre}]});
+        const post = await Post.findByPk(req.params.postId, {include:[ 
+            {model: User, as: "Author", attributes: ['username', 'email', 'editor', 'writer']},
+            {model: User, as: "Editor", attributes: ['username', 'email', 'editor', 'writer']}, 
+            {model: Tag}, {model: Genre}, 
+            {model: User, as: "Liked", attributes: ['username']}, 
+            {model: User, as: "Favorited", attributes: ['username']}, 
+            {model: User, as: "Bookmarked", attributes: ['username']}
+        ]});
         res.json(post);
     } catch (err) {
         next(err);
@@ -22,7 +29,10 @@ router.get('/byPostId/:postId', async (req, res, next) => {
 
 router.get('/byUserId/:userId', async (req, res, next) => {
     try {
-        const userPosts = await Post.findAll({where: {AuthorId: req.params.userId}, include: [{model: Tag}, {model: Genre}]});
+        const userPosts = await Post.findAll({
+            where: {AuthorId: req.params.userId}, 
+            include: [{model: Tag}, {model: Genre}]
+        });
         res.json(userPosts);
     } catch (err) {
         next(err);
@@ -67,7 +77,9 @@ router.post('/', async (req, res, next) => {
 
 router.put('/:postId', async (req, res, next) => {
     try {
-        const post = await Post.findByPk(req.params.postId, {include: [{model: Tag}, {model: Genre}]});
+        const post = await Post.findByPk(req.params.postId, {
+            include: [{model: Tag}, {model: Genre}]
+        });
         let oldTags = post.tags;
         let oldGenre = post.genres;
         await post.update(req.body);
