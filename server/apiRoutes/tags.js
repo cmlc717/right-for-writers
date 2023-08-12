@@ -13,7 +13,8 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:tagId', async (req, res, next) => {
     try {
-
+        const tag = await Tag.findByPk(req.params.tagId);
+        res.json(tag)
     } catch (err) {
         next(err);
     }

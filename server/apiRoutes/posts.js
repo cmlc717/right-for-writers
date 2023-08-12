@@ -72,7 +72,7 @@ router.put('/:postId', async (req, res, next) => {
         let oldGenre = post.genres;
         await post.update(req.body);
 
-        await post.removeTags()
+        await post.removeTags(oldTags);
         const tagList = req.body.tags.split(' '); 
         const tags = await Promise.all(tagList.map(async (tagName) => {
             const [tag, wasCreated] = await Tag.findOrCreate({
@@ -84,6 +84,7 @@ router.put('/:postId', async (req, res, next) => {
         }));
         await post.updateTags(tags)
 
+        await post.removeGenre(oldGenre);
         const [genre, genreWasCreated] = await Genre.findOrCreate({
             where: {
                 name: req.body.genre,
