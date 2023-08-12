@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { models: { User, Post}} = require('../db');
+const { models: { User, Post, Comment}} = require('../db');
 module.exports = router;
 
 router.get('/', async (req, res, next) => {
@@ -53,6 +53,18 @@ router.get('/:userId/bookmarks', async (req, res, next) => {
     const user = await User.findByPk(req.params.userId, {
       attributes: ['username', 'email', 'editor', 'writer'], 
       include: {model: Post, as: "Bookmarked"}
+    });
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/:userId/comments', async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.params.userId, {
+      attributes: ['username', 'email', 'editor', 'writer'], 
+      include: {model: Comment, include: {model: Post} }
     });
     res.json(user);
   } catch (err) {

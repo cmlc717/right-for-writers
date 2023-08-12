@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { models: { User, Post, Tag, Genre}} = require('../db');
+const { models: { User, Post, Tag, Genre, Comment}} = require('../db');
 module.exports = router;
 
 router.get('/', async (req, res, next) => {
@@ -19,7 +19,8 @@ router.get('/byPostId/:postId', async (req, res, next) => {
             {model: Tag}, {model: Genre}, 
             {model: User, as: "Liked", attributes: ['username']}, 
             {model: User, as: "Favorited", attributes: ['username']}, 
-            {model: User, as: "Bookmarked", attributes: ['username']}
+            {model: User, as: "Bookmarked", attributes: ['username']},
+            {model: Comment}
         ]});
         res.json(post);
     } catch (err) {
@@ -31,7 +32,7 @@ router.get('/byUserId/:userId', async (req, res, next) => {
     try {
         const userPosts = await Post.findAll({
             where: {AuthorId: req.params.userId}, 
-            include: [{model: Tag}, {model: Genre}]
+            include: [{model: Tag}, {model: Genre}, {model: Comment}]
         });
         res.json(userPosts);
     } catch (err) {
