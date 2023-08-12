@@ -45,6 +45,7 @@
     "mocha": "^10.2.0",
     "style-loader": "^3.3.3",
     "supertest": "^6.3.3",
+    "tailwindcss": "^3.3.3",
     "webpack": "^5.85.0",
     "webpack-cli": "^5.1.1"
   }
