@@ -39,11 +39,11 @@ const AuthForm = () => {
     return (
       <>
         {!loginAttempt && !signupAttempt?
-        <form>
-          <input value={username} onChange={onChange} name="username" />
-          <input value={password} onChange={onChange} name="password" />
-          <button type='submit' name ='signup' onClick={onSubmit}>Sign Up</button>
-          <button type='submit' name='login' onClick={onSubmit}>Log In</button>
+        <form className="form-group">
+          <input value={username} onChange={onChange} name="username" placeholder="username"/>
+          <input value={password} onChange={onChange} name="password" placeholder='password'/>
+          <button className="btn" type='submit' name ='signup' onClick={onSubmit}>Sign Up</button>
+          <button className="btn" type='submit' name='login' onClick={onSubmit}>Log In</button>
         </form> : <Home username={username} />}
       </>
     )
