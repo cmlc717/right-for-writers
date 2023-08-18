@@ -1,7 +1,9 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import axios from "axios";
-import { fetchAllPosts,  selectAllPosts } from './LandingSlice';
+import { fetchAllPosts } from './LandingSlice';
 import { useSelector, useDispatch } from 'react-redux'
+import LandingPost from './LandingPost';
+// import LandingPost from './LandingPost';
 
 /**
  * COMPONENT
@@ -9,13 +11,12 @@ import { useSelector, useDispatch } from 'react-redux'
 export const Landing = props => {
   const {username} = props;
   const [auth, setAuth] = React.useState({});
-  const [allPosts, setAllPosts] = React.useState([]);
+  const allPosts = useSelector((state) => state.Landing);
   const dispatch = useDispatch();
 
   useEffect (() => {
     dispatch(fetchAllPosts());
-    setAllPosts(selectAllPosts);
-  }, []);
+  }, [dispatch]);
 
   const attemptTokenLogin = async () => {
     const token = localStorage.getItem('token');
@@ -41,7 +42,12 @@ export const Landing = props => {
 
   return (
     <div>
-        <p></p>
+        {allPosts.length > 0? 
+          <ul>
+            {allPosts.map((post) => <LandingPost post={post} />)}
+          </ul>
+          : <div className="text-center alert alert-danger">Error Loading Posts</div>
+        }
     </div>
   )
 }

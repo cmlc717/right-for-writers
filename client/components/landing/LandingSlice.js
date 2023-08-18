@@ -4,14 +4,14 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 export const fetchAllPosts = createAsyncThunk("Posts/getAll", async() => {
     try {
         const response = await axios.get('apiRoutes/posts');
-        return response;
+        return response.data;
     } catch (err) {
         console.error(err)
     }
 });
 
 export const AllPostsSlice = createSlice({
-    name: "AllPosts",
+    name: "Landing",
     initialState: [],
     reducers: {},
     extraReducers: (builder) => {
@@ -20,9 +20,5 @@ export const AllPostsSlice = createSlice({
         });
     }
 });
-
-export const selectAllPosts = (state) => {
-    return state.AllPosts;
-}
 
 export default AllPostsSlice.reducer;
