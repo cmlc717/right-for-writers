@@ -2,7 +2,7 @@ import React, {useEffect} from 'react'
 import { fetchSignupAsync, selectSignup } from './SignupSlice';
 import { fetchLoginAsync, selectLogin } from './LoginSlice';
 import { useSelector, useDispatch } from 'react-redux'
-import Home from './Home';
+import Home from '../Home';
 
 /**
  * COMPONENT

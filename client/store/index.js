@@ -1,15 +1,17 @@
-import { configureStore } from "@reduxjs/toolkit";
-// import thunkMiddleware from 'redux-thunk';
-// import { createLogger } from 'redux-logger';
-// import { applyMiddleware } from 'redux';
-import LoginSlice from "../components/LoginSlice";
-import SignupSlice from "../components/SignupSlice";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import LoginSlice from "../components/authform/LoginSlice";
+import SignupSlice from "../components/authform/SignupSlice";
+import LandingSlice from "../components/landing/LandingSlice";
+import logger from 'redux-logger';
+const middleware = [...getDefaultMiddleware(), logger];
 
 const store = configureStore({
   reducer: {
     Login: LoginSlice,
-    Signup: SignupSlice
-  }
+    Signup: SignupSlice,
+    Landing: LandingSlice
+  },   
+  middleware: middleware,
 });
 
 export default store;
