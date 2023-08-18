@@ -6,6 +6,7 @@ const Main = () => {
   return (
     <Routes>
       <Route path='/' element={ < AuthForm /> } />
+      <Route path='/login' element={ < AuthForm /> } />
     </Routes>
   );
 }
