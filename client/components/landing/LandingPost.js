@@ -5,7 +5,9 @@ const LandingPost = (props) => {
     let post = props.post;
 
     return (
-        <p>post.name</p>
+        <div>
+            <p>{post.name}</p>
+        </div>
     );
 }
 
