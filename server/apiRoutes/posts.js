@@ -4,7 +4,15 @@ module.exports = router;
 
 router.get('/', async (req, res, next) => {
     try {
-        const posts = await Post.findAll();
+        const posts = await Post.findAll({include:[ 
+            {model: User, as: "Author", attributes: ['username', 'email', 'editor', 'writer']},
+            {model: User, as: "Editor", attributes: ['username', 'email', 'editor', 'writer']}, 
+            {model: Tag}, {model: Genre}, 
+            {model: User, as: "Liked", attributes: ['username']}, 
+            {model: User, as: "Favorited", attributes: ['username']}, 
+            {model: User, as: "Bookmarked", attributes: ['username']},
+            {model: Comment}
+        ]});
         res.json(posts);
     } catch (err) {
         next(err);
